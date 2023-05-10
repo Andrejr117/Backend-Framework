@@ -2,6 +2,7 @@ package com.example.kotlindemo.controller
 import com.example.kotlindemo.repository.JogadorRepository
 import com.example.kotlindemo.model.Article
 import com.example.kotlindemo.model.ArticleJogador
+import org.hibernate.boot.model.relational.Database
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*

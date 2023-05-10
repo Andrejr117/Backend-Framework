@@ -1,7 +1,9 @@
 package com.example.kotlindemo.controller
 
 import com.example.kotlindemo.model.Article
+import com.example.kotlindemo.model.Endereco
 import com.example.kotlindemo.repository.ArticleRepository
+import com.example.kotlindemo.repository.EnderecoRepository
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
