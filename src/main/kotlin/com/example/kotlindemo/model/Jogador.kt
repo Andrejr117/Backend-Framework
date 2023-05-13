@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank
 data class Jogador(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    val id: Long = 0,
+    val jogadorid: Long = 0,
     @get: NotBlank
     val email: String,
     @get: NotBlank
@@ -24,6 +24,5 @@ data class Jogador(
     @get: NotBlank
     val pe_dominante: String,
     @get: NotBlank
-    val altura: String,
+    val altura: String
     )
-

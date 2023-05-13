@@ -9,19 +9,17 @@ import javax.validation.constraints.NotBlank
 
 
 @Entity
-data class Endereco {
+data class Endereco (
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = 0,
+    val enderecoId: Long = 0,
     @get: NotBlank
-    val endereço: String,
+    val endereco: String,
     @get: NotBlank
-    val bairo: String,
+    val bairro: String,
     @get: NotBlank
-    val rua: String
+    val rua: String,
     @get: NotBlank
     val numero: String
-
-
-}
+)

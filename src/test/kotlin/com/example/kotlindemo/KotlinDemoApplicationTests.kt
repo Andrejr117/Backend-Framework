@@ -10,7 +10,4 @@ class KotlinDemoApplicationTests {
 	fun contextLoads() {
 	}
 
-	fun main {
-
-	}
 }
