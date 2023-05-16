@@ -1,8 +1,9 @@
+import com.example.kotlindemo.model.JogadorSala
 import javax.persistence.*
 import javax.validation.constraints.NotBlank
 @Entity
 
-data class Sala(
+data class Sala<JogadorSala>(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     val salaId: Long = 0,
@@ -10,8 +11,8 @@ data class Sala(
 
     val numeroSala: Int,
 
-    @OneToMany(targetEntity = Jogador::class)
-    val jogadores: List<Jogador>,
+    @OneToMany(mappedBy = "sala")
+    var jogadores: List<JogadorSala> = emptyList(),
 
     )
 

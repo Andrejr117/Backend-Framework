@@ -10,7 +10,6 @@ import javax.persistence.Entity
 import javax.validation.Valid
 
 
-
 @RestController
 @RequestMapping("/api")
 @Entity
@@ -35,10 +34,11 @@ class JogadorController
     }
 
 
-
     @PutMapping("/jogador/{id}")
-    fun updateJogadorById(@PathVariable(value = "Jogador") Jogador: Long,
-                          @Valid @RequestBody newJogador: Jogador): ResponseEntity<Jogador> {
+    fun updateJogadorById(
+        @PathVariable(value = "Jogador") Jogador: Long,
+        @Valid @RequestBody newJogador: Jogador
+    ): ResponseEntity<Jogador> {
 
         return jogadorRepository.findById(Jogador).map { existingJogador ->
             val updatedJogador: Jogador = existingJogador
@@ -59,23 +59,45 @@ class JogadorController
     }
 
 
-
     @DeleteMapping("/Jogador/{id}")
     fun deletarJogadorById(@PathVariable(value = "id") JogadorId: Long): ResponseEntity<Void> {
-        return jogadorRepository.findById(JogadorId).map { jogador  ->
+        return jogadorRepository.findById(JogadorId).map { jogador ->
             jogadorRepository.delete(jogador)
             ResponseEntity<Void>(HttpStatus.OK)
-            }.orElse(ResponseEntity.notFound().build())
+        }.orElse(ResponseEntity.notFound().build())
+    }
+
+    fun alterarSenha(@PathVariable  jogadorId: Long, novaSenha: Integer, confirmacaoSenha: Integer): Boolean {
+
+        if (novaSenha != confirmacaoSenha) {
+            return false
         }
 
+        val jogador = jogadorRepository.findById(jogadorId)
+
+        if (jogador == null){
+            return false
+        }
+
+        jogador.senha = novaSenha
+
+        jogadorRepository.save(jogador)
+        return true   }
+
+    fun exibirPerfilJogador(jogadorId: Long) {
+        val jogador = Jogador.Companion.getJogadorById(jogadorId)
+        val perfilJogador = (jogadorId)
+
+        if (perfilJogador != null) {
+            println("Nome: ${perfilJogador}")
+            println("${perfilJogador.}")
+            println("${perfilJogador.}")
+            println("${perfilJogador.}")
+            println("${perfilJogador.}")
+        }
+
+    }
 
 }
 
 
-//    fun exibirPerfilJogador (jogadorId: Long) {
-//
-//
-//        //A função exibirListaJogadores recebe a lista de jogadores como parâmetro e itera sobre
-//        //ela usando um loop for. Para cada jogador, imprime na tela seu nome, idade e posição.
-//
-//    }
