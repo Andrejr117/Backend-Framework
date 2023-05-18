@@ -3,16 +3,16 @@ import javax.persistence.*
 import javax.validation.constraints.NotBlank
 @Entity
 
-data class Sala<JogadorSala>(
+data class Sala(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    val salaId: Long = 0,
+    val salaId: Long? = null,
     @get: NotBlank
 
     val numeroSala: Int,
 
     @OneToMany(mappedBy = "sala")
-    var jogadores: List<JogadorSala> = emptyList(),
+    val jogadores: MutableList<Jogador> = mutableListOf(),
 
     )
 

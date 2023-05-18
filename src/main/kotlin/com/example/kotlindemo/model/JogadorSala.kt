@@ -1,9 +1,11 @@
 package com.example.kotlindemo.model
 
+import Jogador
+import Sala
 import javax.persistence.*
 
 @Entity
-data class JogadorSala<Jogador, Sala>(
+data class JogadorSala(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
@@ -13,9 +15,5 @@ data class JogadorSala<Jogador, Sala>(
     var sala: Sala
 
 ) {
-    constructor(jogador: Jogador, sala: Sala);this(){
-        this.jogador = jogador
-        this.sala = sala
-    }
 
 }

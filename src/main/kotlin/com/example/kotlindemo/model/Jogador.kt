@@ -1,9 +1,5 @@
 import com.example.kotlindemo.model.JogadorSala
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
-import javax.persistence.OneToMany
+import javax.persistence.*
 import javax.validation.constraints.NotBlank
 @Entity
 data class Jogador(
@@ -11,22 +7,24 @@ data class Jogador(
     @GeneratedValue(strategy = GenerationType.AUTO)
     val jogadorid: Long = 0,
     @get: NotBlank
-    val email: String,
+    var email: String,
     @get: NotBlank
-    val nome: String,
+    var nome: String,
     @get: NotBlank
-    val senha: Integer,
+    var senha: Integer,
     @get: NotBlank
-    val endereco: String,
+    var endereco: String,
     @get: NotBlank
-    val nacionalidade: String,
+    var nacionalidade: String,
     @get: NotBlank
-    val posicao: String,
+    var posicao: String,
     @get: NotBlank
-    val pe_dominante: String,
+    var peDominante: String,
     @get: NotBlank
-    val altura: String
-    )
+    var altura: String,
 
-@OneToMany(mappedBy = "jogador")
-var sala: List<JogadorSala> = emptyList()
+    @ManyToOne
+    @JoinColumn(name = "sala_id")
+    var sala: Sala? = null
+
+    )

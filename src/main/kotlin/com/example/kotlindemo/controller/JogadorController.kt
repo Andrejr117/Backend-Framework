@@ -26,21 +26,21 @@ class JogadorController
     fun criarNovoJogador(@Valid @RequestBody jogador: Jogador): Jogador =
         jogadorRepository.save(jogador)
 
-    @GetMapping("/jogador/{jogadorid}")
-    fun getJogadorById(@PathVariable(value = "jogadorid") jogadorId: Long): ResponseEntity<Jogador> {
+    @GetMapping("/jogador/{jogador}")
+    fun getJogadorById(@PathVariable(value = "idJogador") jogadorId: Long): ResponseEntity<Jogador> {
         return jogadorRepository.findById(jogadorId).map { jogador ->
             ResponseEntity.ok(jogador)
         }.orElse(ResponseEntity.notFound().build())
     }
 
 
-    @PutMapping("/jogador/{id}")
+    @PutMapping("/jogador/{idJogador}")
     fun updateJogadorById(
-        @PathVariable(value = "Jogador") Jogador: Long,
+        @PathVariable(value = "idJogador") jogadorId: Long,
         @Valid @RequestBody newJogador: Jogador
     ): ResponseEntity<Jogador> {
 
-        return jogadorRepository.findById(Jogador).map { existingJogador ->
+        return jogadorRepository.findById(jogadorId).map { existingJogador ->
             val updatedJogador: Jogador = existingJogador
                 .copy(
                     jogadorid = newJogador.jogadorid,
@@ -50,7 +50,7 @@ class JogadorController
                     endereco = newJogador.endereco,
                     nacionalidade = newJogador.nacionalidade,
                     posicao = newJogador.posicao,
-                    pe_dominante = newJogador.pe_dominante,
+                    peDominante = newJogador.peDominante,
                     altura = newJogador.altura,
 
                     )
@@ -59,43 +59,37 @@ class JogadorController
     }
 
 
-    @DeleteMapping("/Jogador/{id}")
-    fun deletarJogadorById(@PathVariable(value = "id") JogadorId: Long): ResponseEntity<Void> {
-        return jogadorRepository.findById(JogadorId).map { jogador ->
+    @DeleteMapping("/jogador/{idJogador}")
+    fun deletarJogadorById(@PathVariable(value = "idJogador") jogadorId: Long): ResponseEntity<Void> {
+        return jogadorRepository.findById(jogadorId).map { jogador ->
             jogadorRepository.delete(jogador)
             ResponseEntity<Void>(HttpStatus.OK)
         }.orElse(ResponseEntity.notFound().build())
     }
 
-    fun alterarSenha(@PathVariable  jogadorId: Long, novaSenha: Integer, confirmacaoSenha: Integer): Boolean {
-
-        if (novaSenha != confirmacaoSenha) {
-            return false
-        }
-
+    @GetMapping("/jogador/{idJogador}")
+    fun infoPerfilJogador(@PathVariable (value = "idJogador") jogadorId: Long): Jogador? {
         val jogador = jogadorRepository.findById(jogadorId)
+        println("Informações do jogador:")
+        jogador.ifPresent { println(" Nome: ${it.nome}, Posição: ${it.posicao}, Altura: ${it.altura}, " +
+                "Pé Dominante: ${it.peDominante}, Naciolnalidade : ${it.nacionalidade}") }
+        return jogador.orElse(null)
 
-        if (jogador == null){
-            return false
+    }
+
+    @PutMapping("/jogador/{idJogador}/alterar-senha")
+    fun alterarSenha(@PathVariable (value = "idJogador") jogadorId: Long, @RequestBody novaSenha: Integer): ResponseEntity<String> {
+        val jogadorOptional = jogadorRepository.findById(jogadorId)
+
+        if (jogadorOptional.isPresent) {
+            val jogador = jogadorOptional.get()
+            jogador.senha = novaSenha
+            jogadorRepository.save(jogador)
+
+            return ResponseEntity.ok("Senha alterada com sucesso para o jogador de ID ${jogador.nome}.")
         }
 
-        jogador.senha = novaSenha
-
-        jogadorRepository.save(jogador)
-        return true   }
-
-    fun exibirPerfilJogador(jogadorId: Long) {
-        val jogador = Jogador.Companion.getJogadorById(jogadorId)
-        val perfilJogador = (jogadorId)
-
-        if (perfilJogador != null) {
-            println("Nome: ${perfilJogador}")
-            println("${perfilJogador.}")
-            println("${perfilJogador.}")
-            println("${perfilJogador.}")
-            println("${perfilJogador.}")
-        }
-
+        return ResponseEntity.notFound().build()
     }
 
 }

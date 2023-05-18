@@ -24,16 +24,16 @@ data class EnderecoController(
         enderecoRepository.save(endereco)
 
 
-    @GetMapping("/endereco/{enderecoId}")
-    fun getEnderecoById(@PathVariable(value = "enderecoId") enderecoId: Long):
+    @GetMapping("/endereco/{idEndereco}")
+    fun getEnderecoById(@PathVariable(value = "idEndereco") enderecoId: Long):
             ResponseEntity<Endereco> {
         return enderecoRepository.findById(enderecoId).map { gerente ->
             ResponseEntity.ok(gerente)
         }.orElse(ResponseEntity.notFound().build())
     }
 
-    @PutMapping("/endereco/{enderecoId}")
-    fun updateEnderecoById(@PathVariable(value = "enderecoId") enderecoId: Long,
+    @PutMapping("/endereco/{idEndereco}")
+    fun updateEnderecoById(@PathVariable(value = "idEndereco") enderecoId: Long,
                           @Valid @RequestBody newEndereco: Endereco): ResponseEntity<Endereco> {
 
         return enderecoRepository.findById(enderecoId).map { existingEndereco ->
@@ -50,8 +50,8 @@ data class EnderecoController(
 
     }
 
-    @DeleteMapping("/endereco/{enderecoId}")
-    fun deleteEnderecoById(@PathVariable(value = "enderecoId") enderecoId: Long): ResponseEntity<Void> {
+    @DeleteMapping("/endereco/{idEndereco}")
+    fun deleteEnderecoById(@PathVariable(value = "idEndereco") enderecoId: Long): ResponseEntity<Void> {
 
         return enderecoRepository.findById(enderecoId).map { endereco  ->
             enderecoRepository.delete(endereco)
