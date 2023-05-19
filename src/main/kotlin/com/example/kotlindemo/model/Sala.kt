@@ -1,6 +1,8 @@
-import com.example.kotlindemo.model.JogadorSala
+import org.springframework.context.annotation.Lazy
 import javax.persistence.*
 import javax.validation.constraints.NotBlank
+
+@Lazy
 @Entity
 
 data class Sala(

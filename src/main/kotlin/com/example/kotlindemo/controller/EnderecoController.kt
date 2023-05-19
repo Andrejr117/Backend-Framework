@@ -40,10 +40,8 @@ data class EnderecoController(
             val updateEndereco: Endereco = existingEndereco
                 .copy(
                     enderecoId = newEndereco.enderecoId,
-                    endereco = newEndereco.endereco,
-                    bairro = newEndereco.bairro,
-                    rua = newEndereco.rua,
-                    numero = newEndereco.numero
+                    nomeEndereco = newEndereco.nomeEndereco
+
                 )
             ResponseEntity.ok().body(enderecoRepository.save(updateEndereco))
         }.orElse(ResponseEntity.notFound().build())

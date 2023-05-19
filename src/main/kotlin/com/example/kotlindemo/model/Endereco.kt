@@ -1,13 +1,11 @@
 package com.example.kotlindemo.model
 
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
+import Jogador
+import org.springframework.context.annotation.Lazy
+import javax.persistence.*
 import javax.validation.constraints.NotBlank
 
-
-
+@Lazy
 @Entity
 data class Endereco (
 
@@ -15,11 +13,10 @@ data class Endereco (
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val enderecoId: Long = 0,
     @get: NotBlank
-    val endereco: String,
-    @get: NotBlank
-    val bairro: String,
-    @get: NotBlank
-    val rua: String,
-    @get: NotBlank
-    val numero: String
+    val nomeEndereco: String,
+
+    @OneToOne
+    @JoinColumn(name = "jogador_id")
+    val jogador: Jogador
+
 )
