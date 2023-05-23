@@ -1,6 +1,7 @@
 package com.example.kotlindemo.controller
 
 import Jogador
+import com.example.kotlindemo.model.request.Login
 import com.example.kotlindemo.repository.JogadorRepository
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.*
 import java.util.*
 import javax.persistence.Entity
 import javax.validation.Valid
+
 
 
 @RestController
@@ -92,6 +94,29 @@ class JogadorController
         return ResponseEntity.notFound().build()
     }
 
+    @PostMapping("/login")
+    fun login(@Valid @RequestBody login: Login): ResponseEntity<Jogador?> {
+        val jogador = login.email?.let {
+            jogadorRepository.getJogadorByEmail(it)
+        } ?: run {
+            login.jogadorId?.let {
+                this.getJogadorById(login.jogadorId).body
+            }
+        }
+
+        jogador?.let { jogador ->
+            if (login.senha == jogador.senha) {
+                return ResponseEntity(jogador, HttpStatus.OK)
+            } else {
+                return ResponseEntity(null, HttpStatus.UNAUTHORIZED)
+            }
+        } ?: run {
+            return ResponseEntity(null, HttpStatus.UNAUTHORIZED)
+        }
+    }
+
 }
+
+
 
 

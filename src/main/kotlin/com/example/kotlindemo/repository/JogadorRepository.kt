@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface JogadorRepository : JpaRepository<Jogador, Long>{
-    fun getJogadorById(jogadorId: Long): Jogador?
+    fun getJogadorByEmail(Email: String?): Jogador?
 }
