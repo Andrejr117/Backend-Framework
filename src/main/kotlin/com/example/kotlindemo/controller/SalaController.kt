@@ -1,8 +1,9 @@
 package com.example.kotlindemo.controller
-import Jogador
-import Sala
-import com.example.kotlindemo.repository.JogadorRepository
+
+import com.example.kotlindemo.model.Jogador
+import com.example.kotlindemo.model.Sala
 import com.example.kotlindemo.repository.SalaRepository
+import com.example.kotlindemo.repository.JogadorRepository
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -42,8 +43,7 @@ class SalaController(
             val updateSala: Sala = existingSala
                 .copy(
                     salaId = newSala.salaId,
-                    numeroSala = newSala.numeroSala,
-                    jogadores = newSala.jogadores
+                    numeroSala = newSala.numeroSala
                 )
             ResponseEntity.ok().body(salaRepository.save(updateSala))
         }.orElse(ResponseEntity.notFound().build())
@@ -52,7 +52,6 @@ class SalaController(
 
     @DeleteMapping("/sala/{idSala}")
     fun deleteSalaById(@PathVariable(value = "idSala") salaId: Long): ResponseEntity<Void> {
-
         return salaRepository.findById(salaId).map { sala  ->
             salaRepository.delete(sala)
             ResponseEntity<Void>(HttpStatus.OK)

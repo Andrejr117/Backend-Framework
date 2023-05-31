@@ -1,6 +1,5 @@
 package com.example.kotlindemo.model
 
-import Jogador
 import org.springframework.context.annotation.Lazy
 import javax.persistence.*
 import javax.validation.constraints.NotBlank
@@ -15,8 +14,6 @@ data class Endereco (
     @get: NotBlank
     val nomeEndereco: String,
 
-    @OneToOne
-    @JoinColumn(name = "jogador_id")
-    val jogador: Jogador
 
-)
+
+    )

@@ -1,4 +1,5 @@
-import com.example.kotlindemo.model.Endereco
+package com.example.kotlindemo.model
+
 import com.fasterxml.jackson.annotation.JsonIgnore
 import org.springframework.context.annotation.Lazy
 import javax.persistence.*
@@ -34,12 +35,13 @@ data class Jogador(
     @get: NotBlank
     var altura: String,
 
+    @OneToOne
+    @JoinColumn(name = "endereco_id")
+    var endereco: Endereco,
+
     @ManyToOne
     @JoinColumn(name = "sala_id")
-    var sala: Sala? = null,
+    var sala: Sala? = null
 
-    @JsonIgnore
-    @OneToOne(mappedBy = "jogador", cascade = [CascadeType.ALL])
-    var endereco: Endereco? = null
 
-    )
+)

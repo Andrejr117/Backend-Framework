@@ -1,22 +1,17 @@
 package com.example.kotlindemo.controller
 
-import Jogador
+import com.example.kotlindemo.model.Jogador
 import com.example.kotlindemo.model.request.Login
 import com.example.kotlindemo.repository.JogadorRepository
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.util.*
-import javax.persistence.Entity
 import javax.validation.Valid
-
 
 
 @RestController
 @RequestMapping("/api")
-@Entity
-
-
 class JogadorController
     (private val jogadorRepository: JogadorRepository) {
 
@@ -49,7 +44,6 @@ class JogadorController
                     email = newJogador.email,
                     nome = newJogador.nome,
                     senha = newJogador.senha,
-                    endereco = newJogador.endereco,
                     nacionalidade = newJogador.nacionalidade,
                     posicao = newJogador.posicao,
                     peDominante = newJogador.peDominante,
@@ -97,7 +91,7 @@ class JogadorController
     @PostMapping("/login")
     fun login(@Valid @RequestBody login: Login): ResponseEntity<Jogador?> {
         val jogador = login.email?.let {
-            jogadorRepository.getJogadorByEmail(it)
+            jogadorRepository.findJogadorByEmail(it)
         } ?: run {
             login.jogadorId?.let {
                 this.getJogadorById(login.jogadorId).body
@@ -116,7 +110,3 @@ class JogadorController
     }
 
 }
-
-
-
-

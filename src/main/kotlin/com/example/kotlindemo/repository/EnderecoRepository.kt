@@ -1,7 +1,6 @@
 package com.example.kotlindemo.repository
 
 
-import Jogador
 import com.example.kotlindemo.model.Endereco
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
@@ -11,6 +10,6 @@ import org.springframework.stereotype.Repository
  */
 @Repository
 interface EnderecoRepository : JpaRepository<Endereco, Long>{
-    fun getEnderecoByJogador(jogador: Jogador): List<Endereco>?
+
 
 }

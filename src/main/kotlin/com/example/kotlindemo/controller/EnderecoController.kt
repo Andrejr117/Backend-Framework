@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
 
-
 @RestController
 @RequestMapping("/api")
 data class EnderecoController(
@@ -27,8 +26,8 @@ data class EnderecoController(
     @GetMapping("/endereco/{idEndereco}")
     fun getEnderecoById(@PathVariable(value = "idEndereco") enderecoId: Long):
             ResponseEntity<Endereco> {
-        return enderecoRepository.findById(enderecoId).map { gerente ->
-            ResponseEntity.ok(gerente)
+        return enderecoRepository.findById(enderecoId).map { endereco ->
+            ResponseEntity.ok(endereco)
         }.orElse(ResponseEntity.notFound().build())
     }
 
@@ -39,7 +38,7 @@ data class EnderecoController(
         return enderecoRepository.findById(enderecoId).map { existingEndereco ->
             val updateEndereco: Endereco = existingEndereco
                 .copy(
-                    enderecoId = newEndereco.enderecoId,
+                     enderecoId = newEndereco.enderecoId,
                     nomeEndereco = newEndereco.nomeEndereco
 
                 )
