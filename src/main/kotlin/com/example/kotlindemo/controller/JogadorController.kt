@@ -2,12 +2,13 @@ package com.example.kotlindemo.controller
 
 
 import com.example.kotlindemo.model.Jogador
+import com.example.kotlindemo.model.request.EntrarNaSalaRequest
 import com.example.kotlindemo.model.request.Login
 import com.example.kotlindemo.repository.JogadorRepository
+import com.example.kotlindemo.repository.SalaRepository
 import com.example.management.model.response.BaseResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.*
 import java.util.*
 import javax.validation.Valid
@@ -16,7 +17,9 @@ import javax.validation.Valid
 @RestController
 @RequestMapping("/api")
 class JogadorController
-    (private val jogadorRepository: JogadorRepository) {
+    (private val jogadorRepository: JogadorRepository,
+     private val salaRepository: SalaRepository
+            ) {
 
     @PostMapping("/jogador")
     fun criarNovoJogador(@Valid @RequestBody jogador: Jogador): Jogador =
@@ -112,5 +115,52 @@ class JogadorController
             return BaseResponse.createResponse()
         }
     }
+
+    @PostMapping("/jogador/entrasala")
+    fun entrarNaSala(@RequestBody request: EntrarNaSalaRequest): ResponseEntity<String> {
+        val sala = salaRepository.findByNumeroSala(request.numeroSala)
+
+        if (sala != null) {
+            if (request.jogador.sala != null) {
+                return ResponseEntity.badRequest().body("O jogador já está em uma sala.")
+            }
+
+            request.jogador.sala = sala
+            jogadorRepository.save(request.jogador)
+
+            return ResponseEntity.ok("Jogador entrou na sala com sucesso.")
+        }
+
+        return ResponseEntity.notFound().build()
+    }
+
+    @DeleteMapping("/jogador/saisala")
+    fun sairDaSala(@RequestParam numeroSala: Int, @RequestParam jogadorId: Long): ResponseEntity<String> {
+        val sala = salaRepository.findByNumeroSala(numeroSala)
+
+        if (sala != null) {
+            val jogadorOptional = jogadorRepository.findById(jogadorId)
+
+            if (jogadorOptional.isPresent) {
+                val jogador = jogadorOptional.get()
+
+                if (jogador.sala?.salaId == sala.salaId) {
+                    jogador.sala = null
+                    jogadorRepository.save(jogador)
+
+                    return ResponseEntity.ok("Jogador saiu da sala com sucesso.")
+                }
+
+                return ResponseEntity.badRequest().body("O jogador não está na sala informada.")
+            }
+
+            return ResponseEntity.notFound().build()
+        }
+
+        return ResponseEntity.notFound().build()
+    }
+
+
+
 
 }

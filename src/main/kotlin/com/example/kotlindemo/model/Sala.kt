@@ -14,10 +14,14 @@ data class Sala(
     val salaId: Long? = null,
 
     @get: NotNull
-    val numeroSala: Int,
+    var numeroSala: Int,
+
+    var equipe1: String?,
+
+    var equipe2: String?,
 
     @OneToMany(mappedBy = "sala")
-    var jogadores: List<Jogador> = ArrayList()
+    var jogadores: MutableList<Jogador> = ArrayList()
 
 )
 

@@ -10,4 +10,6 @@ import org.springframework.stereotype.Repository
 interface JogadorRepository : JpaRepository<Jogador, Long>{
     fun findByEmail(Email: String): Jogador?
     fun findBySala(sala: Sala): List<Jogador>
+    fun findJogadoresByEquipe(equipe: String): List<Jogador>
+
 }

@@ -44,7 +44,11 @@ data class Jogador(
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "sala_id")
-    var sala: Sala? = null
+    var sala: Sala? = null,
+
+    @JsonIgnore
+    var equipe: String? = null,
 
 
-)
+
+    )

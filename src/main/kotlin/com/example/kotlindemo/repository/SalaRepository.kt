@@ -7,4 +7,6 @@ import java.util.*
 
 
 @Repository
-interface SalaRepository : JpaRepository<Sala, Long>
+interface SalaRepository : JpaRepository<Sala, Long>{
+    fun findByNumeroSala(numeroSala: Int): Sala?
+}
