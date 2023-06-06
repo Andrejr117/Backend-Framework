@@ -94,18 +94,18 @@ class JogadorController
 
     @PostMapping("/login")
     fun login(@Valid @RequestBody login: Login): ResponseEntity<BaseResponse<Jogador?>> {
-        val gerente = login.email?.let {
+        val jogador = login.email?.let {
             jogadorRepository.findByEmail(it)
         } ?: run {
             login.jogadorId?.let {
                 this.getJogadorById(login.jogadorId).body
             }
         }
-        gerente?.let { gerente ->
-            if (login.senha == gerente.senha) {
+        jogador?.let { jogador ->
+            if (login.senha == jogador.senha) {
                 return BaseResponse.createResponse(
                     isError = false,
-                    data = gerente,
+                    data = jogador,
                     code = HttpStatus.OK
                 )
             } else {

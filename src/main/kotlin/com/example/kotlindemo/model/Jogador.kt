@@ -21,7 +21,6 @@ data class Jogador(
 
     @JsonIgnore
     @NotNull
-    @Size(min = 4, max = 4, message = "A senha deve ter 4 dígitos")
     var senha: Int?,
 
     @get: NotBlank
