@@ -8,15 +8,7 @@ class KotlinDemoApplicationApplication
 
 fun main(args: Array<String>) {
 
-    val novoJogador = Jogador(
-        email = "jogador@example.com",
-        nome = "João",
-        senha = 123456,
-        nacionalidade = "Brasil",
-        posicao = "Atacante",
-        peDominante = "Direito",
-        altura = 1.80
-    )
+
 
 
 
