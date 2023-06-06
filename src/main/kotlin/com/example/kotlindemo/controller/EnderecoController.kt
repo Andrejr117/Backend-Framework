@@ -18,7 +18,7 @@ data class EnderecoController(
         enderecoRepository.findAll()
 
 
-    @PostMapping("/endereco")
+    @PostMapping("/criarEndereco")
     fun createNewEndereco(@Valid @RequestBody endereco: Endereco): Endereco =
         enderecoRepository.save(endereco)
 

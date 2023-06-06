@@ -1,10 +1,12 @@
 package com.example.kotlindemo.controller
 
+
 import com.example.kotlindemo.model.Jogador
 import com.example.kotlindemo.model.request.Login
 import com.example.kotlindemo.repository.JogadorRepository
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.*
 import java.util.*
 import javax.validation.Valid
@@ -15,15 +17,11 @@ import javax.validation.Valid
 class JogadorController
     (private val jogadorRepository: JogadorRepository) {
 
-    @GetMapping("/jogador")
-    fun getjogador(): List<Jogador> =
-        jogadorRepository.findAll()
-
     @PostMapping("/jogador")
     fun criarNovoJogador(@Valid @RequestBody jogador: Jogador): Jogador =
         jogadorRepository.save(jogador)
 
-    @GetMapping("/jogador/{jogador}")
+    @GetMapping("/jogador/{idJogador}")
     fun getJogadorById(@PathVariable(value = "idJogador") jogadorId: Long): ResponseEntity<Jogador> {
         return jogadorRepository.findById(jogadorId).map { jogador ->
             ResponseEntity.ok(jogador)
@@ -31,7 +29,7 @@ class JogadorController
     }
 
 
-    @PutMapping("/jogador/{idJogador}")
+    @PutMapping("/atualizarjogador/{idJogador}")
     fun updateJogadorById(
         @PathVariable(value = "idJogador") jogadorId: Long,
         @Valid @RequestBody newJogador: Jogador
@@ -55,7 +53,7 @@ class JogadorController
     }
 
 
-    @DeleteMapping("/jogador/{idJogador}")
+    @DeleteMapping("/deletejogador/{idJogador}")
     fun deletarJogadorById(@PathVariable(value = "idJogador") jogadorId: Long): ResponseEntity<Void> {
         return jogadorRepository.findById(jogadorId).map { jogador ->
             jogadorRepository.delete(jogador)
@@ -63,7 +61,7 @@ class JogadorController
         }.orElse(ResponseEntity.notFound().build())
     }
 
-    @GetMapping("/jogador/{idJogador}")
+    @GetMapping("/infojogador/{idJogador}")
     fun infoPerfilJogador(@PathVariable (value = "idJogador") jogadorId: Long): Jogador? {
         val jogador = jogadorRepository.findById(jogadorId)
         println("Informações do jogador:")
@@ -73,8 +71,8 @@ class JogadorController
 
     }
 
-    @PutMapping("/jogador/{idJogador}/alterar-senha")
-    fun alterarSenha(@PathVariable (value = "idJogador") jogadorId: Long, @RequestBody novaSenha: Integer): ResponseEntity<String> {
+    @PutMapping("/alterarsenha/{idJogador}")
+    fun alterarSenha(@PathVariable (value = "idJogador") jogadorId: Long, @RequestBody novaSenha: Int): ResponseEntity<String> {
         val jogadorOptional = jogadorRepository.findById(jogadorId)
 
         if (jogadorOptional.isPresent) {
@@ -82,7 +80,7 @@ class JogadorController
             jogador.senha = novaSenha
             jogadorRepository.save(jogador)
 
-            return ResponseEntity.ok("Senha alterada com sucesso para o jogador de ID ${jogador.nome}.")
+            return ResponseEntity.ok("Senha alterada com sucesso para o jogador de ID ${jogador.jogadorid}.")
         }
 
         return ResponseEntity.notFound().build()
