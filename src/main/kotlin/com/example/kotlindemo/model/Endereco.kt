@@ -11,9 +11,9 @@ data class Endereco (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val enderecoId: Long = 0,
-    @get: NotBlank
-    val nomeEndereco: String,
 
+    @get: NotBlank
+    val nomeEndereco: String
 
 
     )

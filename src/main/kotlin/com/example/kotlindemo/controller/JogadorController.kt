@@ -4,6 +4,7 @@ package com.example.kotlindemo.controller
 import com.example.kotlindemo.model.Jogador
 import com.example.kotlindemo.model.request.Login
 import com.example.kotlindemo.repository.JogadorRepository
+import com.example.management.model.response.BaseResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.transaction.annotation.Transactional
@@ -46,6 +47,7 @@ class JogadorController
                     posicao = newJogador.posicao,
                     peDominante = newJogador.peDominante,
                     altura = newJogador.altura,
+                    endereco = newJogador.endereco
 
                     )
             ResponseEntity.ok().body(jogadorRepository.save(updatedJogador))
@@ -86,24 +88,28 @@ class JogadorController
         return ResponseEntity.notFound().build()
     }
 
+
     @PostMapping("/login")
-    fun login(@Valid @RequestBody login: Login): ResponseEntity<Jogador?> {
-        val jogador = login.email?.let {
-            jogadorRepository.findJogadorByEmail(it)
+    fun login(@Valid @RequestBody login: Login): ResponseEntity<BaseResponse<Jogador?>> {
+        val gerente = login.email?.let {
+            jogadorRepository.findByEmail(it)
         } ?: run {
             login.jogadorId?.let {
                 this.getJogadorById(login.jogadorId).body
             }
         }
-
-        jogador?.let { jogador ->
-            if (login.senha == jogador.senha) {
-                return ResponseEntity(jogador, HttpStatus.OK)
+        gerente?.let { gerente ->
+            if (login.senha == gerente.senha) {
+                return BaseResponse.createResponse(
+                    isError = false,
+                    data = gerente,
+                    code = HttpStatus.OK
+                )
             } else {
-                return ResponseEntity(null, HttpStatus.UNAUTHORIZED)
+                return BaseResponse.createResponse()
             }
         } ?: run {
-            return ResponseEntity(null, HttpStatus.UNAUTHORIZED)
+            return BaseResponse.createResponse()
         }
     }
 

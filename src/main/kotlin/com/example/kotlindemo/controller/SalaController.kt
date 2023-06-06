@@ -22,7 +22,7 @@ class SalaController(
         salaRepository.findAll()
 
 
-    @PostMapping("/sala")
+    @PostMapping("/criarsala")
     fun createNewSala(@Valid @RequestBody sala: Sala): Sala =
         salaRepository.save(sala)
 
@@ -35,7 +35,7 @@ class SalaController(
         }.orElse(ResponseEntity.notFound().build())
     }
 
-    @PutMapping("/sala/{idSala}")
+    @PutMapping("/atualizarsala/{idSala}")
     fun updateSalaById(@PathVariable(value = "idSala") salaId: Long,
                            @Valid @RequestBody newSala: Sala): ResponseEntity<Sala> {
 
@@ -50,7 +50,7 @@ class SalaController(
 
     }
 
-    @DeleteMapping("/sala/{idSala}")
+    @DeleteMapping("/deletesala/{idSala}")
     fun deleteSalaById(@PathVariable(value = "idSala") salaId: Long): ResponseEntity<Void> {
         return salaRepository.findById(salaId).map { sala  ->
             salaRepository.delete(sala)
@@ -80,7 +80,7 @@ class SalaController(
         return ResponseEntity.notFound().build()
     }
 
-    @DeleteMapping("/{salaId}/jogadores/{jogadorId}")
+    @DeleteMapping("/sala/{salaId}/jogadores/{jogadorId}")
     fun removerJogadorDaSala(@PathVariable (value ="salaId")salaId: Long, @PathVariable jogadorId: Long): ResponseEntity<String> {
         val salaOptional = salaRepository.findById(salaId)
 
@@ -103,6 +103,19 @@ class SalaController(
             }
 
             return ResponseEntity.notFound().build()
+        }
+
+        return ResponseEntity.notFound().build()
+    }
+
+    @GetMapping("/sala/{idSala}/jogadores")
+    fun getJogadoresDaSala(@PathVariable(value = "idSala") salaId: Long): ResponseEntity<List<Jogador>> {
+        val salaOptional = salaRepository.findById(salaId)
+
+        if (salaOptional.isPresent) {
+            val sala = salaOptional.get()
+            val jogadores = jogadorRepository.findBySala(sala)
+            return ResponseEntity.ok(jogadores)
         }
 
         return ResponseEntity.notFound().build()
