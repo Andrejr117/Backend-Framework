@@ -3,15 +3,15 @@ package com.example.kotlindemo.model
 import com.fasterxml.jackson.annotation.JsonIgnore
 import org.springframework.context.annotation.Lazy
 import javax.persistence.*
-import javax.validation.constraints.*
+import javax.validation.constraints.NotBlank
 
-
+@Lazy
 @Entity
 data class Jogador(
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    var jogadorid: Long = 0,
+    val jogadorid: Long = 0,
 
     @get: NotBlank
     var email: String,
@@ -20,9 +20,8 @@ data class Jogador(
     var nome: String,
 
     @JsonIgnore
-    @NotNull
-    @Size(min = 4, max = 4, message = "A senha deve ter 4 dígitos")
-    var senha: Int?,
+    @get: NotBlank
+    var senha: Integer,
 
     @get: NotBlank
     var nacionalidade: String,
@@ -33,22 +32,19 @@ data class Jogador(
     @get: NotBlank
     var peDominante: String,
 
-    @get: NotNull
-    var altura: Double,
-
+    @get: NotBlank
+    var altura: String,
 
     @OneToOne
     @JoinColumn(name = "endereco_id")
-    var endereco: Endereco? = null,
+    var endereco: Endereco,
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "sala_id")
     var sala: Sala? = null,
 
-    @JsonIgnore
-    var equipe: String? = null,
+
+    var equipe: String? = null
 
 
-
-    )
+)

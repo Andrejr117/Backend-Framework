@@ -22,8 +22,9 @@ class JogadorController
             ) {
 
     @PostMapping("/jogador")
-    fun criarNovoJogador(@Valid @RequestBody jogador: Jogador): Jogador =
-        jogadorRepository.save(jogador)
+    fun criarNovoJogador(@Valid @RequestBody jogador: Jogador): Jogador {
+        return jogadorRepository.save(jogador)
+    }
 
     @GetMapping("/jogador/{idJogador}")
     fun getJogadorById(@PathVariable(value = "idJogador") jogadorId: Long): ResponseEntity<Jogador> {
@@ -77,7 +78,7 @@ class JogadorController
     }
 
     @PutMapping("/alterarsenha/{idJogador}")
-    fun alterarSenha(@PathVariable (value = "idJogador") jogadorId: Long, @RequestBody novaSenha: Int): ResponseEntity<String> {
+    fun alterarSenha(@PathVariable(value = "idJogador") jogadorId: Long, @RequestBody novaSenha: Integer): ResponseEntity<String> {
         val jogadorOptional = jogadorRepository.findById(jogadorId)
 
         if (jogadorOptional.isPresent) {
@@ -92,29 +93,33 @@ class JogadorController
     }
 
 
+
+
+
     @PostMapping("/login")
     fun login(@Valid @RequestBody login: Login): ResponseEntity<BaseResponse<Jogador?>> {
-        val gerente = login.email?.let {
-            jogadorRepository.findByEmail(it)
-        } ?: run {
-            login.jogadorId?.let {
-                this.getJogadorById(login.jogadorId).body
-            }
+        val jogador = login.email?.let { email ->
+            jogadorRepository.findByEmail(email)
+        } ?: login.jogadorId?.let { jogadorId ->
+            getJogadorById(jogadorId).body
         }
-        gerente?.let { gerente ->
-            if (login.senha == gerente.senha) {
-                return BaseResponse.createResponse(
+
+        return jogador?.let { jogador ->
+            if (login.senha.toString() == jogador.senha.toString()) {
+                BaseResponse.createResponse(
                     isError = false,
-                    data = gerente,
+                    data = jogador,
                     code = HttpStatus.OK
                 )
             } else {
-                return BaseResponse.createResponse()
+                BaseResponse.createResponse()
             }
-        } ?: run {
-            return BaseResponse.createResponse()
-        }
+        } ?: BaseResponse.createResponse()
     }
+
+
+
+
 
     @PostMapping("/jogador/entrasala")
     fun entrarNaSala(@RequestBody request: EntrarNaSalaRequest): ResponseEntity<String> {
